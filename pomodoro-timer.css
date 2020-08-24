@@ -18,4 +18,57 @@ body {
     visibility: hidden;
 }
 
+.display {
+    height: 40%;
+    width: 70%;
+    margin:0% 15%;
+    font-size:18em;
+    color: white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border: 3px dashed red;
+    border-radius: 50%;
 
+}
+
+.timer {
+    height:45%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.timer__break {
+    height:70%;
+    font-size:3em;
+    width:50%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.timer__focus {
+    height:70%;
+    font-size:3em;
+    width:50%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.timer__break__button{
+    width:20%;
+}
+
+.timer__break__button__less{
+    width:40%;
+    font-size:0.8em;
+}
+
+.timer__break__button__more {
+    width:40%;
+    font-size:0.8em;
+}

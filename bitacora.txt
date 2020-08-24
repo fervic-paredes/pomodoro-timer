@@ -12,6 +12,9 @@ maquetación:
 
 
     css:
+        tiempo estimado: 60 min
+        timpo real: 300 min 
+        impedimentos:
 
 pseudocondigo:
 codificar:
