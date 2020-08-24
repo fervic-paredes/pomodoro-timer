@@ -1,0 +1,21 @@
+body {
+    height: 100vh;
+    background-color: rgb(170, 117, 117);
+    font-size:1em;
+}
+
+.container {
+    display:flex;
+    flex-direction: column;
+    height:100%;
+    background-color: #2980b9;
+}
+
+.advice {
+    display: flex;
+    justify-content:flex-end;
+    font-size:4em;
+    visibility: hidden;
+}
+
+
