@@ -50,20 +50,20 @@ body {
     align-items:center;
 }
 
-.timer__break__button{
+.button-start {
+    width:30%;
+    margin:0% 5%;
+    font-size:6em;
+    border:1px dashed black;
+    border-radius: 10px 100px;
+}
+.box-of-button {
     width:20%;
+    display:flex;
+    justify-content:space-between;
 }
 
 .button {
-    width:40%;
-    font-size:0.8em;
-}
-.timer__break__button__less{
-    width:40%;
-    font-size:0.8em;
-}
-
-.timer__break__button__more {
     width:40%;
     font-size:0.8em;
 }

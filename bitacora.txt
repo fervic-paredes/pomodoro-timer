@@ -6,17 +6,17 @@ diseño:
 
 maquetación: 
     html:
-            tiempo estimado: 60 min
-            timpo real: 33,31 min 
+            tiempo estimado: 60 min.
+            timpo real: 33,31 min .
             impedimentos:
 
 
     css:
-        tiempo estimado: 60 min
-        timpo real: 300 min 
-        impedimentos:
+        tiempo estimado: 60 min.
+        timpo real: 420 min.
+        impedimentos: ignorance of certain rules.
 
-pseudocondigo:
+pseudocondigo: 15 min.
 codificar:
 testing:
 optimizador

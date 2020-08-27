@@ -6,10 +6,10 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="pomodoro-timer.css"/>
 </head>
-<body>
+<body onload= "pomodoro();">
     <div class="container">
         <div class="advice">"it is moment for release"</div>
-        <div class="display">conteo</div>
+        <div class="display" id="display">conteo</div>
         <div class="timer">
             <div class="timer__break timer__box">
                 <div class="timer__break__title">break</div>
@@ -19,10 +19,11 @@
                     <button class="timer__break__button__more button__more button">+</button>
                 </div>
             </div>
+            <button class="timer__box button-start">start</button>
             <div class="timer__focus timer__box">
                 <div class="timer__break__title ">focus</div>
                 <div class="timer__break__quantity">time</div>
-                <div class="timer__break__button box-of-button">
+                <div class="timer__focus__button box-of-button">
                     <button class="timer__break__button__less button__less button">-</button>
                     <button class="timer__break__button__more button__more button">+</button>
                 </div>
@@ -30,6 +31,7 @@
             </div>
         </div>
     </div>
+    <script src="pomodoro-timer.js"></script>
     
 </body>
 </html>
