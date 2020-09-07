@@ -1,5 +1,6 @@
 class Pomodoro {
 
+    advise;
     startButton;
     resetButton;
     breakTimeDisplay;
@@ -18,6 +19,7 @@ class Pomodoro {
     timer = 5;
     
     constructor(focusTime, breakTime){
+        this.advise = document.getElementsByClassName("advice")[0];
         this.focusTime = focusTime;
         this.focusTimeDisplay = document.getElementsByClassName("timer__focus__quantity")[0];
         this.focusTimeDisplay.innerHTML = this.focusTime;
@@ -40,9 +42,9 @@ class Pomodoro {
         this.breakTimeButtonMinus = document.getElementsByClassName("timer__break__button__less")[0];
         this.breakTimeButtonMinus.onclick = this.decrementBreakTime;
         
-
+        
     }
-
+    
     start = () => {
         this.counter = this.counterbackup;
         this.display.innerHTML = this.counter;
@@ -52,16 +54,32 @@ class Pomodoro {
             this.counter--;
             if(this.counter === 0){
                 clearInterval(this.timer);
+                this.advise.style.visibility = "visible";
                 this.startBreakTime();
-                console.log("hola mundo");
-                setTimeout(() => console.log("hola fervic"),5000);
 
+                
             }
             this.display.innerHTML = this.counter;
         }, 1000);
         
     }
 
+    startBreakTime = () => {
+        this.counter = this.breakTime;
+        this.display.innerHTML = this.counter;
+        this.startButton.onclick = this.stop;
+        this.timer = setInterval(() =>{
+            this.counter--;
+            if(this.counter === 0){
+                clearInterval(this.timer);
+                this.counterbackup = this.focusTime;
+                this.startButton.innerHTML = "START";
+                this.startButton.onclick = this.start;
+            }
+            this.display.innerHTML = this.counter;
+        }, 1000);
+    }
+    
     reset = () => {
         this.display.innerHTML = this.focusTime;
         this.counterbackup = this.focusTime;
@@ -89,33 +107,17 @@ class Pomodoro {
 
     incrementFocusTime = () => {
         this.focusTime++;
+        this.counterbackup = this.focusTime;
         this.focusTimeDisplay.innerHTML = this.focusTime;
     }
 
     decrementFocusTime = () => {
         this.focusTime--;
+        this.counterbackup = this.focusTime;
         this.focusTimeDisplay.innerHTML = this.focusTime;
     }
 
-    startBreakTime = () => {
-        console.log("soy startbreak ");
-        this.counter = this.counterbackup;
-        this.display.innerHTML = this.counter;
-        this.startButton.innerHTML = "STOP";
-        this.startButton.onclick = this.stop;
-        
-        this.timer = setInterval(() =>{
-            this.counter--;
-            if(this.counter === 0){
-                clearInterval(this.timer);
-
-            }
-            this.display.innerHTML = this.counter;
-            console.log("estoy dentro de starbrak");
-        }, 4000);
-        console.log("fin startbreak");
-    }
     
 }
 
-let pomodoro5min = new Pomodoro(6,5);
+let pomodoro5min = new Pomodoro(20,5);

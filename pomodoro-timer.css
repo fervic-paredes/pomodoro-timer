@@ -18,8 +18,22 @@ body {
     visibility: hidden;
 }
 
+.reset {
+    margin: 0% 0% 1%;
+    display:flex;
+    justify-content:center;
+}
+
+#resetButton {
+    height: 100%;
+    width:20%;
+    font-size: 5em;
+    border:1px dashed black;
+    border-radius: 100px 10px;
+}
+
 .display {
-    height: 40%;
+    height: 45%;
     width: 70%;
     margin:0% 15%;
     font-size:18em;
@@ -29,11 +43,10 @@ body {
     align-items:center;
     border: 3px dashed red;
     border-radius: 50%;
-
 }
 
 .timer {
-    height:45%;
+    height: 35%;
     display:flex;
     align-items:center;
     justify-content:center;
