@@ -11,12 +11,15 @@ class Pomodoro {
     focusTimeDisplay;
     focusTimeButtonAdd;
     focusTimeButtonMinus;
-    counter;
-    notification;
     timer;
     display;
     counterbackup;
     timer = 5;
+    minutes;
+    minutesbackup;
+    seconds;
+    secondsbackup;
+    status;
     
     constructor(focusTime, breakTime){
         this.advise = document.getElementsByClassName("advice")[0];
@@ -32,8 +35,10 @@ class Pomodoro {
         this.resetButton = document.getElementById("resetButton");
         this.resetButton.onclick = this.reset;
         this.display = document.getElementById("display");
-        this.display.innerHTML = this.focusTime;
-        this.counterbackup = this.focusTime;
+        this.display.innerHTML = this.focusTime + ":00";
+        this.minutes = focusTime;
+        this.minutesbackup = focusTime;
+        this.seconds = 0;
         this.breakTime = breakTime;
         this.breakTimeDisplay = document.getElementsByClassName("timer__break__quantity")[0];
         this.breakTimeDisplay.innerHTML = this.breakTime;
@@ -45,38 +50,52 @@ class Pomodoro {
         
     }
     
+    convert = () => {
+        if ((this.minutes != 0) || (this.seconds != 0)){
+            if (this.seconds === 0){
+                this.minutes--;
+                this.seconds = 59;
+            } else {
+                this.seconds--;
+            }
+            
+        }
+    }
+    
     start = () => {
-        this.counter = this.counterbackup;
-        this.display.innerHTML = this.counter;
+        this.status = true;
+        this.minutes = this.minutesbackup;
+        this.display.innerHTML = this.minutes + ":" + this.seconds;
         this.startButton.innerHTML = "STOP";
         this.startButton.onclick = this.stop;
-        this.timer = setInterval(() =>{
-            this.counter--;
-            if(this.counter === 0){
+        this.timer = setInterval(() => {
+            this.convert();
+
+            if((this.minutes === 0) && (this.seconds === 0)){
                 clearInterval(this.timer);
                 this.advise.style.visibility = "visible";
                 this.startBreakTime();
-
-                
             }
-            this.display.innerHTML = this.counter;
+            this.display.innerHTML = this.minutes + ":" + this.seconds;
         }, 1000);
         
     }
 
     startBreakTime = () => {
-        this.counter = this.breakTime;
-        this.display.innerHTML = this.counter;
+        this.status = false;
+        this.minutes = this.breakTime;
+        this.display.innerHTML = this.minutes + ":00";
         this.startButton.onclick = this.stop;
         this.timer = setInterval(() =>{
-            this.counter--;
-            if(this.counter === 0){
+            this.convert();
+
+            if((this.minutes === 0) && (this.seconds === 0)){
                 clearInterval(this.timer);
-                this.counterbackup = this.focusTime;
+                this.minutesbackup = this.focusTime;
                 this.startButton.innerHTML = "START";
                 this.startButton.onclick = this.start;
             }
-            this.display.innerHTML = this.counter;
+            this.display.innerHTML = this.minutes + ":" + this.seconds;
         }, 1000);
     }
     
@@ -85,13 +104,19 @@ class Pomodoro {
         this.counterbackup = this.focusTime;
         clearInterval(this.timer);
         this.startButton.innerHTML = "START";
+        this.advise.style.visibility = "hidden";
         this.startButton.onclick = this.start;
     }
 
     stop = () => {
-        this.counterbackup = this.counter;
+        this.minutesbackup = this.minutes;
+        this.secondsbackup = this.seconds;
         clearInterval(this.timer);
-        this.startButton.onclick = this.start;
+        if (status) {
+            this.startButton.onclick = this.start;
+        } else {
+            this.startButton.onclick = this.startBreakTime;
+        }
         this.startButton.innerHTML = "START";
     }
 
@@ -120,4 +145,4 @@ class Pomodoro {
     
 }
 
-let pomodoro5min = new Pomodoro(20,5);
+let pomodoro5min = new Pomodoro(1,1);
