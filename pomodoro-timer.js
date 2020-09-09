@@ -99,6 +99,21 @@ class Pomodoro {
         }, 1000);
     }
     
+    stop = () => {
+        this.minutesbackup = this.minutes;
+        this.secondsbackup = this.seconds;
+        console.log("ya se asignaron los valores");
+        console.log(this.minutes);
+        clearInterval(this.timer);
+        if (this.status) {
+            this.startButton.onclick = this.start;
+            console.log("soy true");
+        } else {
+            this.startButton.onclick = this.startBreakTime;
+        }
+        this.startButton.innerHTML = "START";
+    }
+
     reset = () => {
         this.display.innerHTML = this.focusTime;
         this.counterbackup = this.focusTime;
@@ -108,17 +123,6 @@ class Pomodoro {
         this.startButton.onclick = this.start;
     }
 
-    stop = () => {
-        this.minutesbackup = this.minutes;
-        this.secondsbackup = this.seconds;
-        clearInterval(this.timer);
-        if (status) {
-            this.startButton.onclick = this.start;
-        } else {
-            this.startButton.onclick = this.startBreakTime;
-        }
-        this.startButton.innerHTML = "START";
-    }
 
     incrementBreakTime = () => {
         this.breakTime++;
