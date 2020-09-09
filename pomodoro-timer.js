@@ -74,6 +74,7 @@ class Pomodoro {
             if((this.minutes === 0) && (this.seconds === 0)){
                 clearInterval(this.timer);
                 this.advise.style.visibility = "visible";
+                this.minutesbackup = this.breakTime;
                 this.startBreakTime();
             }
             this.display.innerHTML = this.minutes + ":" + this.seconds;
@@ -83,8 +84,8 @@ class Pomodoro {
 
     startBreakTime = () => {
         this.status = false;
-        this.minutes = this.breakTime;
-        this.display.innerHTML = this.minutes + ":00";
+        this.minutes = this.minutesbackup;
+        this.display.innerHTML = this.minutes + ":" + this.seconds;
         this.startButton.onclick = this.stop;
         this.timer = setInterval(() =>{
             this.convert();
@@ -115,8 +116,9 @@ class Pomodoro {
     }
 
     reset = () => {
-        this.display.innerHTML = this.focusTime;
-        this.counterbackup = this.focusTime;
+        this.minutesbackup = this.focusTime;
+        this.seconds = 0;
+        this.display.innerHTML = this.focusTime + ":00";
         clearInterval(this.timer);
         this.startButton.innerHTML = "START";
         this.advise.style.visibility = "hidden";
@@ -136,17 +138,17 @@ class Pomodoro {
 
     incrementFocusTime = () => {
         this.focusTime++;
-        this.counterbackup = this.focusTime;
+        this.minutes = this.focusTime;
         this.focusTimeDisplay.innerHTML = this.focusTime;
     }
 
     decrementFocusTime = () => {
         this.focusTime--;
-        this.counterbackup = this.focusTime;
+        this.minutes = this.focusTime;
         this.focusTimeDisplay.innerHTML = this.focusTime;
     }
 
     
 }
 
-let pomodoro5min = new Pomodoro(1,1);
+let pomodoro5min = new Pomodoro(1,2);
