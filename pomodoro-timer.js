@@ -5,9 +5,11 @@ class Pomodoro {
     resetButton;
     breakTimeDisplay;
     breakTime;
+    backupBreakTime
     breakTimeButtonAdd;
     breakTimeButtonMinus;
     focusTime;
+    backupFocusTime;
     focusTimeDisplay;
     focusTimeButtonAdd;
     focusTimeButtonMinus;
@@ -21,13 +23,13 @@ class Pomodoro {
     
     constructor(focusTime, breakTime){
         this.advise = document.getElementsByClassName("advice")[0];
-        this.focusTime = focusTime;
+        this.focusTime = this.backupFocusTime = focusTime;
         this.focusTimeDisplay = document.getElementsByClassName("timer__focus__quantity")[0];
         this.focusTimeDisplay.innerHTML = focusTime;
         this.focusTimeButtonAdd = document.getElementsByClassName("timer__focus__button__more")[0];
-        this.focusTimeButtonAdd.onclick = this.callIncrementFocus;
+        this.focusTimeButtonAdd.onclick = this.showIncrementFocus;
         this.focusTimeButtonMinus = document.getElementsByClassName("timer__focus__button__less")[0];
-        this.focusTimeButtonMinus.onclick = this.decrementFocusTime;
+        this.focusTimeButtonMinus.onclick = this.showDecrementFocus;
         this.startButton = document.getElementById("startButton");
         this.startButton.onclick = this.initialize;
         this.resetButton = document.getElementById("resetButton");
@@ -38,31 +40,31 @@ class Pomodoro {
         this.hours = 0;
         this.minutes = focusTime;
         this.seconds = 0;
-        this.breakTime = breakTime;
+        this.breakTime = this.backupBreakTime = breakTime;
         this.breakTimeDisplay = document.getElementsByClassName("timer__break__quantity")[0];
         this.breakTimeDisplay.innerHTML = breakTime;
         this.breakTimeButtonAdd = document.getElementsByClassName("timer__break__button__more")[0];
-        this.breakTimeButtonAdd.onclick = this.callIncrementBreak;
+        this.breakTimeButtonAdd.onclick = this.showIncrementBreak;
         this.breakTimeButtonMinus = document.getElementsByClassName("timer__break__button__less")[0];
-        this.breakTimeButtonMinus.onclick = this.decrementBreakTime;
+        this.breakTimeButtonMinus.onclick = this.showDecrementBreak;
     }
 
     //this funtion serves to make the convertion from minutes to hours and minutes
     assigmentTime = (time) => {
         this.hours = Math.floor(time / 60);
         this.minutes = time % 60;
-        this.seconds = 0;
     }
 
     // this funtion serves to make countdown
     countdown = () => {
-        if ((this.hours != 0) || (this.minutes != 0) || (this.seconds !=0)) { 
-            if ((this.hours === 0) && (this.minutes === 0)){
+        if ((this.hours != 0) || (this.minutes != 0) || (this.seconds !=0)) {
+
+            if (((this.hours != 0) || (this.minutes != 0)) && (this.seconds != 0)) {
                 this.seconds--;
-            } else if ((this.hours === 0) && (this.seconds === 0)) {
+            } else if (((this.hours === 0) && (this.minutes != 0)) || ((this.hours != 0) && (this.minutes != 0))) {
                 this.minutes--;
                 this.seconds = 59;
-            } else if ((this.minutes === 0) && (this.seconds === 0)) {
+            } else if ((this.hours != 0) && (this.minutes === 0)) {
                 this.hours--;
                 this.minutes = 59;
                 this.seconds = 59;
@@ -85,7 +87,7 @@ class Pomodoro {
     //this funtion serves to show countdown on the screen
     show = () => {
         if (this.hours > 0){
-            this.display.innerHTML = this.hoursShow + ":" + this.minutesShow + ":" + this.minutesShow;
+            this.display.innerHTML = this.hoursShow + ":" + this.minutesShow + ":" + this.secondsShow;
         } else {
             this.display.innerHTML = this.minutesShow + ":" + this.secondsShow;
         }
@@ -95,138 +97,101 @@ class Pomodoro {
             this.advise.style.visibility = "visible";
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     initialize = () => {
         if(this.status) {
-            this.start(this.focusTime, this.breakTime);
+            this.start(this.focusTime);
         } else {
-            this.start(this.breakTime, this.focusTime);
+            this.start(this.breakTime);
         }
     }
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    start = (timeA, timeB) => {
-        this.startButton.innerHTML = "STOP";
+    start = (timeA) => {
+        console.log(this.focusTime);
         this.startButton.onclick = this.stop;
-        console.log("empeze start");
+        this.startButton.innerHTML = "STOP";
         this.assigmentTime(timeA);
         this.countdown();
         this.settingTime();
         this.show();
-        console.log("antes de entrar al bucle");
         this.timer = setInterval(() => {
-            console.log("soy start dentro de setInterval");
-            this.settingTime();
             this.countdown();
+            this.settingTime();
             this.show();
             if((this.hours === 0) && (this.minutes === 0) && (this.seconds === 0)){
                 clearInterval(this.timer);
-                this.status = !(this.status);
-                this.start(timeB, timeA);
+                console.log(this.status);
+                if (this.status){
+                    this.status = !(this.status);
+                    this.initialize();
+                }
             }
-        }, 5000);
+        }, 1000);
+    }
+    
+    backup = () => {
+        if (this.status){
+            this.focusTime = (this.hours * 60) + this.minutes;
+        } else {
+            this.breakTime = (this.hours * 60) + this.minutes;
+        }
     }
 
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     stop = () => {
         this.startButton.innerHTML = "START";
-        if (this.status) {
-            clearInterval(this.timer);
-            this.startButton.onclick = this.start;
-        } else {
-            this.startButton.onclick = this.startBreakTime;
-        }
+        clearInterval(this.timer);
+        this.backup();
+        console.log("pase el backup");
+        this.startButton.onclick = this.initialize;
     }
     
     reset = () => {
         clearInterval(this.timer);
+        [this.focusTime, this.breakTime] = [this.backupFocusTime, this.backupBreakTime];
+        console.log(this.focusTime);
+        this.seconds = 0;
         this.status = true;
-        this.assigmentTime();
+        this.assigmentTime(this.backupFocusTime);
+        this.settingTime();
         this.show();
         this.startButton.innerHTML = "START";
         this.advise.style.visibility = "hidden";
-        this.startButton.onclick = this.start;
+        this.startButton.onclick = this.initialize;
     }
     
     //block of call funtions
-    callIncrementFocus = () => {
-        this.increment(this.focusTime, this.focusTimeDisplay);
+    showIncrementFocus = () => {
+        this.backupFocusTime = this.increment(this.backupFocusTime);
+        this.focusTimeDisplay.innerHTML = this.backupFocusTime;
     }
    
-    callIncrementBreak = () => {
-        this.increment(this.breakTime, this.breakTimeDisplay);
+    showIncrementBreak = () => {
+        this.backupBreakTime = this.increment(this.backupBreakTime);
+        this.breakTimeDisplay.innerHTML = this.backupBreakTime;
     }
 
-    callDecrementFocus = () => {
-        this.decremet(this.focusTime, this.focusTimeDisplay);
+    showDecrementFocus = () => {
+        this.backupFocusTime = this.decrement(this.backupFocusTime);
+        this.focusTimeDisplay.innerHTML = this.backupFocusTime;
     }
 
-    callDecrementBreak = () => {
-        this.decremet(this.breakTime, this.breakTimeDisplay);
+    showDecrementBreak = () => {
+        this.backupBreakTime = this.decrement(this.backupBreakTime);
+        this.breakTimeDisplay.innerHTML = this.backupBreakTime;
     }
-    //000000000000000000000000000000000000000000000000000000000
 
     //funtions of setting times, for break time and focus time
-    increment = (time, side) => {
+    increment = (time) => {
         time++;
-        side.innerHTML = time;
+        return time;
     }
 
-    decrement = (time, side) => {
+    decrement = (time) => {
         if (time > 0) {
             time--;
-            side.innerHTML = time;
         }
+        return time;
     }
-    //000000000000000000000000000000000000000000000000000000000
 }
 
-let pomodoro5min = new Pomodoro(1,1);
+let pomodoro5min = new Pomodoro(75,1);
